@@ -1,0 +1,61 @@
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>TaskMaker</title>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <link rel="shortcut icon" href="/assets/img/favicon.png"/>
+  <link rel="stylesheet" type="text/css" href="/assets/style.css"/>
+</head>
+<body>
+  <nav>
+    <div class="navlink"><a href="/">Home</a></div>
+    <div class="navlink"><a href="/today">Due Today</a></div>
+    <div class="navlink"><a href="/all">All Tasks</a></div>
+    <div class="navlink" style="float:right;"><a href="/logout">Log out</a></div>
+  </nav>
+  <section id="makeTask">
+    <form id="TaskForm" name="TaskForm" action="/maker" method="POST" class="TaskForm">
+      <label for="name">Name: </label>
+      <input id="TaskName" type="text" name="name" placeholder="Task Name"/>
+      <label for="dueDate">Due Date: </label>
+      <input id="DueDate" type="date" name="dueDate" placeholder="Task Due Date"/>
+      <input id="token" type="hidden" name="_csrf" value={{csrfToken}} />
+      <a id="makeTaskSubmit" href="#" class="makeTaskSubmit">Make Task</a>
+    </form>
+  </section>
+  <section id="completeTask">
+    
+  </section>
+  <section id="Tasks">
+    <h2 style="text-align:center;">Recently Added</h2>
+    <div class="Task">
+        {{#if Tasks}}
+         {{#each Tasks}}
+            <div class="Task">
+                <h3 class="TaskName">{{this.formattedName}}</h3>
+                <h3 class="TaskAge">Due Date: {{this.formattedDate}}</h3>
+                {{#if this.completed}}
+                    <img class="checkImg" src="/assets/img/checked.png"" alt="Checked label" height="50" width="50">
+                {{else}}
+                    <form class="checkForm" name={{this.name}}Form action="/completeTask" method="POST">
+                        <a id={{this.name}} class="completeTaskSubmit" value={{this.name}} href="#">
+                            <img src="/assets/img/unchecked.png"" alt="Checked label" height="50" width="50">
+                        </a>
+                    </form> 
+                {{/if}}
+                 
+            </div>
+            
+            {{/each}}
+          {{else}}
+            <h3 class="emptyTask">No Tasks yet</h3>
+          {{/if}}
+    </div>
+  </section>
+  <div id="TaskMessage"><img id="speech" src="/assets/img/speech.png" alt="speech box"/>
+    <h3><span id="errorMessage"></span></h3>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
+  <script src="/assets/maker.js" type="text/babel"></script>
+</body>
+</html>
